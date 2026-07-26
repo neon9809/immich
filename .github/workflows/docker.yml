@@ -43,7 +43,7 @@ jobs:
           file: server/Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: ghcr.io/${{ github.repository_owner }}/immich-server:main
+          tags: ghcr.io/${{ github.repository }}:main
           build-args: DEVICE=cpu
           cache-from: type=gha
           cache-to: type=gha,mode=max
