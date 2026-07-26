@@ -116,6 +116,11 @@ export interface EnvData {
     mediaLocation?: string;
   };
 
+  volcengine: {
+    accessKeyId?: string;
+    secretAccessKey?: string;
+  };
+
   workers: ImmichWorker[];
 
   plugins: {
@@ -358,6 +363,11 @@ const getEnv = (): EnvData => {
     storage: {
       ignoreMountCheckErrors: !!dto.IMMICH_IGNORE_MOUNT_CHECK_ERRORS,
       mediaLocation: dto.IMMICH_MEDIA_LOCATION,
+    },
+
+    volcengine: {
+      accessKeyId: dto.IMMICH_VOLCENGINE_ACCESS_KEY_ID,
+      secretAccessKey: dto.IMMICH_VOLCENGINE_SECRET_ACCESS_KEY,
     },
 
     telemetry: {

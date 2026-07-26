@@ -129,6 +129,7 @@
     {/if}
 
     <ActionButton action={Actions.Edit} />
+    <ActionButton action={Actions.AIRetouch} />
 
     {#if isOwner}
       <DeleteAction {asset} {onAction} {preAction} {onUndoDelete} />

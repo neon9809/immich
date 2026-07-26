@@ -87,6 +87,11 @@ export const envData: EnvData = {
     ignoreMountCheckErrors: false,
   },
 
+  volcengine: {
+    accessKeyId: undefined,
+    secretAccessKey: undefined,
+  },
+
   telemetry: {
     apiPort: 8081,
     microservicesPort: 8082,

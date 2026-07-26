@@ -6031,6 +6031,68 @@
         "x-immich-state": "Stable"
       }
     },
+    "/face-pretty/{id}": {
+      "post": {
+        "description": "Generates a JPEG version of the image under 5 MB, submits it to the Volcengine FacePretty API, and saves the returned image to a 已处理 folder next to the original. Volcengine credentials are read from the server environment so they are never exposed to the client.",
+        "operationId": "facePretty",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12})$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FacePrettyDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FacePrettyResponseDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          },
+          {
+            "cookie": []
+          },
+          {
+            "api_key": []
+          }
+        ],
+        "summary": "AI face retouch (FacePretty)",
+        "tags": [
+          "Assets"
+        ],
+        "x-immich-history": [
+          {
+            "version": "v1",
+            "state": "Added"
+          }
+        ],
+        "x-immich-permission": "asset.read"
+      }
+    },
     "/faces": {
       "get": {
         "description": "Retrieve all faces belonging to an asset.",
@@ -19082,6 +19144,42 @@
         },
         "required": [
           "id"
+        ],
+        "type": "object"
+      },
+      "FacePrettyDto": {
+        "properties": {
+          "beautyLevel": {
+            "description": "Beauty level in the range [0.0, 1.0]. Defaults to 1.0.",
+            "maximum": 1,
+            "minimum": 0,
+            "type": "number"
+          },
+          "doRisk": {
+            "description": "Whether to run content moderation on the input image.",
+            "type": "boolean"
+          },
+          "multiFace": {
+            "description": "When true, beautify all faces; otherwise only the largest face. Defaults to true.",
+            "type": "boolean"
+          }
+        },
+        "type": "object"
+      },
+      "FacePrettyResponseDto": {
+        "properties": {
+          "filename": {
+            "description": "Filename of the saved processed image.",
+            "type": "string"
+          },
+          "path": {
+            "description": "Absolute path of the saved processed image.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "filename",
+          "path"
         ],
         "type": "object"
       },

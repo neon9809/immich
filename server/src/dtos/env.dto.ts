@@ -67,6 +67,8 @@ export const EnvSchema = z
     IMMICH_THIRD_PARTY_SUPPORT_URL: z.string().optional(),
     IMMICH_ALLOW_SETUP: stringBool.optional(),
     IMMICH_TRUSTED_PROXIES: trustedProxiesSchema,
+    IMMICH_VOLCENGINE_ACCESS_KEY_ID: z.string().optional(),
+    IMMICH_VOLCENGINE_SECRET_ACCESS_KEY: z.string().optional(),
     IMMICH_WORKERS_INCLUDE: z.string().optional(),
     IMMICH_WORKERS_EXCLUDE: z.string().optional(),
     DB_DATABASE_NAME: z.string().optional(),

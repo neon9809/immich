@@ -4,6 +4,7 @@ import {
   AssetTypeEnum,
   AssetVisibility,
   getAssetInfo,
+  getBaseUrl,
   runAssetJobs,
   updateAsset,
   type AssetJobsDto,
@@ -13,6 +14,7 @@ import { modalManager, toastManager, type ActionItem } from '@immich/ui';
 import {
   mdiAccountCircleOutline,
   mdiAlertOutline,
+  mdiAutoFix,
   mdiCogRefreshOutline,
   mdiCompare,
   mdiContentCopy,
@@ -44,6 +46,7 @@ import { assetViewerManager } from '$lib/managers/asset-viewer-manager.svelte';
 import { authManager } from '$lib/managers/auth-manager.svelte';
 import { eventManager } from '$lib/managers/event-manager.svelte';
 import { featureFlagsManager } from '$lib/managers/feature-flags-manager.svelte';
+import AIRetouchModal from '$lib/modals/AIRetouchModal.svelte';
 import AssetAddToAlbumModal from '$lib/modals/AssetAddToAlbumModal.svelte';
 import AssetTagModal from '$lib/modals/AssetTagModal.svelte';
 import ProfileImageCropperModal from '$lib/modals/ProfileImageCropperModal.svelte';
@@ -97,6 +100,50 @@ export const getAssetBulkActions = ($t: MessageFormatter) => {
   };
 
   return { AddToAlbum, RefreshFacesJob, RefreshMetadataJob, RegenerateThumbnailJob, TranscodeVideoJob };
+};
+
+const aiRetouchInProgress: Record<string, boolean> = {};
+
+export interface AIRetouchOptions {
+  multiFace: boolean;
+  beautyLevel: number;
+}
+
+export const runAIRetouch = async (asset: AssetResponseDto, options: AIRetouchOptions): Promise<boolean> => {
+  const $t = await getFormatter();
+  if (aiRetouchInProgress[asset.id]) {
+    return false;
+  }
+  aiRetouchInProgress[asset.id] = true;
+  toastManager.primary($t('ai_retouch_running'));
+  try {
+    const response = await fetch(`${getBaseUrl()}/face-pretty/${asset.id}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'same-origin',
+      body: JSON.stringify({ multiFace: options.multiFace, beautyLevel: options.beautyLevel }),
+    });
+    if (!response.ok) {
+      let message = `HTTP ${response.status}`;
+      try {
+        const body = await response.json();
+        if (body?.message) {
+          message = body.message;
+        }
+      } catch {
+        // ignore JSON parse errors and keep the generic message
+      }
+      throw new Error(message);
+    }
+    const data = (await response.json()) as { filename: string };
+    toastManager.primary($t('ai_retouch_success', { values: { filename: data.filename } }));
+    return true;
+  } catch (error) {
+    handleError(error, $t('ai_retouch_failed'));
+    return false;
+  } finally {
+    delete aiRetouchInProgress[asset.id];
+  }
 };
 
 export const getAssetActions = ($t: MessageFormatter, asset: AssetResponseDto & { stackPrimaryAssetId?: string }) => {
@@ -250,6 +297,13 @@ export const getAssetActions = ($t: MessageFormatter, asset: AssetResponseDto & 
     shortcuts: [{ key: 'e' }],
   };
 
+  const AIRetouch: ActionItem = {
+    title: $t('ai_retouch'),
+    icon: mdiAutoFix,
+    $if: () => isOwner && asset.type === AssetTypeEnum.Image && !asset.isTrashed,
+    onAction: () => modalManager.show(AIRetouchModal, { asset }),
+  };
+
   const SetProfilePicture: ActionItem = {
     title: $t('set_as_profile_picture'),
     icon: mdiAccountCircleOutline,
@@ -316,6 +370,7 @@ export const getAssetActions = ($t: MessageFormatter, asset: AssetResponseDto & 
     Tag,
     TagPeople,
     Edit,
+    AIRetouch,
     SetProfilePicture,
     ViewInTimeline,
     ViewSimilar,
