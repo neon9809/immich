@@ -33,9 +33,10 @@ services:
 
   immich-machine-learning:
     container_name: immich_machine_learning
-    # For hardware acceleration, add one of -[armnn, cuda, rocm, openvino, rknn] to the image tag.
-    # Example tag: ${IMMICH_VERSION:-release}-cuda
+    # CPU (default):
     image: ghcr.io/immich-app/immich-machine-learning@sha256:d76fe88b69282c09a97eac4f82dafa82cfd77bce274bc742591cde974f87dacb
+    # CUDA (uncomment below and comment out CPU line above):
+    # image: ghcr.io/immich-app/immich-machine-learning@sha256:0d66acce99224495fda2288e2d8f52b459712b2e897e67b492729bce07775c08
     # extends: # uncomment this section for hardware acceleration - see https://docs.immich.app/features/ml-hardware-acceleration
     #   file: hwaccel.ml.yml
     #   service: cpu # set to one of [armnn, cuda, rocm, openvino, openvino-wsl, rknn] for accelerated inference - use the `-wsl` version for WSL2 where applicable
