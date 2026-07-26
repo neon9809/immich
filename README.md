@@ -99,12 +99,26 @@ Access the demo [here](https://demo.immich.app). For the mobile app, you can use
 | Global Map                                   | Yes    | Yes |
 | Partner Sharing                              | Yes    | Yes |
 | Facial recognition and clustering            | Yes    | Yes |
+| AI Face Retouch (Volcengine FacePretty)      | No     | Yes |
 | Memories (x years ago)                       | Yes    | Yes |
 | Offline support                              | Yes    | No  |
 | Read-only gallery                            | Yes    | Yes |
 | Stacked Photos                               | Yes    | Yes |
 | Tags                                         | No     | Yes |
 | Folder View                                  | Yes    | Yes |
+
+### AI Face Retouch
+
+Uses [Volcengine FacePretty API](https://www.volcengine.com/docs/6444/78543) to beautify faces in photos. Click the AI修图 button in the photo viewer to select options (multi-face mode, beauty level), and the processed image is saved to a `已处理` folder next to the original.
+
+**Configuration** — Add to `docker/.env`:
+
+```
+IMMICH_VOLCENGINE_ACCESS_KEY_ID=your_key
+IMMICH_VOLCENGINE_SECRET_ACCESS_KEY=your_secret
+```
+
+Get your keys from the [Volcengine IAM console](https://console.volcengine.com/iam/keymanage/). The API supports 1 concurrent request; additional requests are queued automatically.
 
 ## Translations
 
