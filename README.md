@@ -13,6 +13,9 @@
 </p>
 <h3 align="center">High performance self-hosted photo and video management solution</h3>
 <br/>
+
+> [!NOTE]
+> **This fork** adds AI face retouch (Volcengine FacePretty) — click the AI修图 button in the photo viewer to beautify faces. Everything else is identical to upstream Immich. See [AI Face Retouch](#ai-face-retouch) for setup.
 <a href="https://immich.app">
 <img src="design/immich-screenshots.png" title="Main Screenshot">
 </a>
@@ -118,7 +121,7 @@ IMMICH_VOLCENGINE_ACCESS_KEY_ID=your_key
 IMMICH_VOLCENGINE_SECRET_ACCESS_KEY=your_secret
 ```
 
-Get your keys from the [Volcengine IAM console](https://console.volcengine.com/iam/keymanage/). The API supports 1 concurrent request; additional requests are queued automatically.
+Get your keys from the [Volcengine IAM console](https://console.volcengine.com/iam/keymanage/). You must first activate the FacePretty service at [https://console.volcengine.com/ai/ability/info/61](https://console.volcengine.com/ai/ability/info/61) (free trial or paid plan required). The API supports 1 concurrent request; additional requests are queued automatically.
 
 ## Translations
 

@@ -14,6 +14,7 @@ IMMICH_VOLCENGINE_SECRET_ACCESS_KEY=your_secret_access_key
 ```
 
 Get your keys from [https://console.volcengine.com/iam/keymanage/](https://console.volcengine.com/iam/keymanage/).
+You must first activate the FacePretty service at [https://console.volcengine.com/ai/ability/info/61](https://console.volcengine.com/ai/ability/info/61) (free trial or paid plan required).
 
 If these are not set, the button will show a "not configured" error when clicked.
 
